@@ -45,4 +45,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-}
+    public function assignedLeads()
+    {
+        return $this->hasMany(Lead::class, 'assigned_to');
+    }
+
+    public function performedActivities()
+    {
+        return $this->hasMany(LeadActivity::class, 'performed_by');
+    }
+}  
