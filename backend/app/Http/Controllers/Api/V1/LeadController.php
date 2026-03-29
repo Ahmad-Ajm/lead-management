@@ -27,6 +27,7 @@ class LeadController extends Controller
         }
 
         $leads = Lead::query()
+            ->with('assignedUser')
             ->search($request->get('search'))
             ->ofStage($request->get('stage'))
             ->fromSource($request->get('source'))
@@ -45,6 +46,8 @@ class LeadController extends Controller
     {
         $lead = Lead::create($request->validated());
 
+        $lead->load('assignedUser');
+
         return (new LeadResource($lead))
             ->response()
             ->setStatusCode(201);
@@ -52,21 +55,31 @@ class LeadController extends Controller
 
     public function show(Lead $lead)
     {
-        $lead->load(['activities']);
+        $lead->load([
+            'assignedUser',
+            'activities' => function ($query) {
+                $query->latest('created_at');
+            }
+        ]);
 
         return new LeadResource($lead);
     }
 
-    
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
         $lead->update($request->validated());
 
-        $lead = $lead->fresh()->load('activities');
+        $lead = $lead->fresh()->load([
+            'assignedUser',
+            'activities' => function ($query) {
+                $query->latest('created_at');
+            }
+        ]);
 
         return new LeadResource($lead);
     }
-
+    
+    
     public function destroy(Lead $lead): JsonResponse
     {
         $lead->delete();

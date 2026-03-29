@@ -11,13 +11,16 @@ class LeadStageController extends Controller
 {
     public function update(UpdateLeadStageRequest $request, Lead $lead)
     {
-        // تحديث المرحلة فقط
         $lead->update([
             'stage' => $request->validated()['stage'],
         ]);
 
-        // تحميل activities 
-        $lead = $lead->fresh()->load('activities');
+        $lead = $lead->fresh()->load([
+            'assignedUser',
+            'activities' => function ($query) {
+                $query->latest('created_at');
+            }
+        ]);
 
         return new LeadResource($lead);
     }

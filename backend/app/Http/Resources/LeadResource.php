@@ -16,7 +16,16 @@ class LeadResource extends JsonResource
             'phone' => $this->phone,
             'source' => $this->source,
             'stage' => $this->stage,
+
             'assigned_to' => $this->assigned_to,
+            'assigned_user' => $this->whenLoaded('assignedUser', function () {
+                return [
+                    'id' => $this->assignedUser->id,
+                    'name' => $this->assignedUser->name,
+                    'email' => $this->assignedUser->email,
+                ];
+            }),
+
             'notes' => $this->notes,
             'metadata' => $this->metadata,
             'created_at' => $this->created_at?->toISOString(),
