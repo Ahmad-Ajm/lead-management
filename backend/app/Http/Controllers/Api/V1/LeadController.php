@@ -26,41 +26,20 @@ class LeadController extends Controller
             $sortDir = 'desc';
         }
 
-        $query = Lead::query();
-
-        if ($request->filled('search')) {
-            $search = $request->string('search')->toString();
-
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('stage')) {
-            $query->where('stage', $request->stage);
-        }
-
-        if ($request->filled('source')) {
-            $query->where('source', $request->source);
-        }
-
-        if ($request->filled('date_from')) {
-            $query->whereDate('created_at', '>=', $request->date_from);
-        }
-
-        if ($request->filled('date_to')) {
-            $query->whereDate('created_at', '<=', $request->date_to);
-        }
-
-        $leads = $query
+        $leads = Lead::query()
+            ->search($request->get('search'))
+            ->ofStage($request->get('stage'))
+            ->fromSource($request->get('source'))
+            ->betweenDates(
+                $request->get('date_from'),
+                $request->get('date_to')
+            )
             ->orderBy($sortBy, $sortDir)
             ->paginate(20)
             ->withQueryString();
 
         return LeadResource::collection($leads);
-    }
+    }   
 
     public function store(StoreLeadRequest $request)
     {
