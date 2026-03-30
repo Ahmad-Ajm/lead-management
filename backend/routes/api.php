@@ -16,10 +16,6 @@ Route::prefix('v1')->group(function () {
     Route::patch('/leads/{lead}/stage', [LeadStageController::class, 'update']);
     Route::apiResource('leads', LeadController::class);
     Route::post('/leads/{lead}/enrich', LeadEnrichmentController::class);
-    Route::post('/facebook', FacebookWebhookController::class);
-    Route::post('/whatsapp', WhatsAppWebhookController::class);
-    Route::post('/zapier', ZapierWebhookController::class);
-
 
     Route::prefix('webhooks')->group(function () {
         Route::post('/facebook', FacebookWebhookController::class)
