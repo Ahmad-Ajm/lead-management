@@ -19,6 +19,10 @@ class LeadResource extends JsonResource
 
             'assigned_to' => $this->assigned_to,
             'assigned_user' => $this->whenLoaded('assignedUser', function () {
+                if (! $this->assignedUser) {
+                    return null;
+                }
+
                 return [
                     'id' => $this->assignedUser->id,
                     'name' => $this->assignedUser->name,
