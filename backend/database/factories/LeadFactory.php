@@ -27,7 +27,9 @@ class LeadFactory extends Factory
                 'converted',
                 'lost',
             ]),
-            'assigned_to' => fake()->boolean(40) ? User::inRandomOrder()->value('id') : null,
+            'assigned_to' => fake()->boolean(40)
+                ? User::query()->inRandomOrder()->value('id')
+                : null,
             'notes' => fake()->boolean(70) ? fake()->sentence() : null,
             'metadata' => [
                 'imported' => fake()->boolean(),
