@@ -68,12 +68,24 @@ class LeadIngestionService
             ->where('source', $normalized['source'])
             ->where('created_at', '>=', $since)
             ->where(function ($query) use ($normalized) {
+                $hasCondition = false;
+            
                 if (! empty($normalized['email'])) {
-                    $query->orWhere('email', $normalized['email']);
+                    $query->where('email', $normalized['email']);
+                    $hasCondition = true;
                 }
-
+            
                 if (! empty($normalized['phone'])) {
-                    $query->orWhere('phone', $normalized['phone']);
+                    if ($hasCondition) {
+                        $query->orWhere('phone', $normalized['phone']);
+                    } else {
+                        $query->where('phone', $normalized['phone']);
+                        $hasCondition = true;
+                    }
+                }
+            
+                if (! $hasCondition) {
+                    $query->whereRaw('1 = 0');
                 }
             })
             ->latest('id')
