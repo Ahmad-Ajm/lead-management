@@ -1,0 +1,1 @@
+export function LoadingState({ text="Loading..." }:{text?:string}){return <div className="card">{text}</div>} export function ErrorState({message}:{message:string}){return <div className="error-box">{message}</div>} export function EmptyState({text}:{text:string}){return <div className="empty-box">{text}</div>}
