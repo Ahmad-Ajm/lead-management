@@ -20,3 +20,14 @@ Route::prefix('v1')->group(function () {
     Route::post('/whatsapp', WhatsAppWebhookController::class);
     Route::post('/zapier', ZapierWebhookController::class);
 });
+
+Route::prefix('webhooks')->group(function () {
+    Route::post('/facebook', FacebookWebhookController::class)
+        ->middleware('webhook.signature:facebook');
+
+    Route::post('/whatsapp', WhatsAppWebhookController::class)
+        ->middleware('webhook.signature:whatsapp');
+
+    Route::post('/zapier', ZapierWebhookController::class)
+        ->middleware('webhook.signature:zapier');
+});
