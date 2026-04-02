@@ -15,7 +15,6 @@ require __DIR__.'/../vendor/autoload.php';
 
 // Bootstrap Laravel and handle the request...
 /** @var Application $app */
-file_put_contents('/tmp/laravel-hit.log', "public index reached\n", FILE_APPEND);
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 $app->handleRequest(Request::capture());
