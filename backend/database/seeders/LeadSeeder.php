@@ -10,15 +10,33 @@ class LeadSeeder extends Seeder
 {
     public function run(): void
     {
-        if (User::count() === 0) {
-            User::factory()->create([
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
-            ]);
+        $existing = Lead::count();
+
+        if ($existing >= 50) {
+            return;
         }
 
-        if (Lead::count() === 0) {
-            Lead::factory()->count(50)->create();
+        $faker = \Faker\Factory::create();
+
+        $userId = User::query()->value('id');
+
+        $sources = ['facebook', 'whatsapp', 'website', 'manual'];
+        $stages = ['new', 'contacted', 'follow_up', 'assigned', 'converted', 'lost'];
+
+        for ($i = 0; $i < (50 - $existing); $i++) {
+            Lead::create([
+                'name' => $faker->name(),
+                'email' => $faker->boolean(70) ? $faker->unique()->safeEmail() : null,
+                'phone' => $faker->boolean(80) ? $faker->phoneNumber() : null,
+                'source' => $faker->randomElement($sources),
+                'stage' => $faker->randomElement($stages),
+                'assigned_to' => $faker->boolean(40) ? $userId : null,
+                'notes' => $faker->boolean(70) ? $faker->sentence() : null,
+                'metadata' => [
+                    'imported' => $faker->boolean(),
+                    'tag' => $faker->word(),
+                ],
+            ]);
         }
     }
 }
