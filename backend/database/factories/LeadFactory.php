@@ -10,16 +10,16 @@ class LeadFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'email' => $this->faker->boolean(70) ? $this->faker->unique()->safeEmail() : null,
-            'phone' => $this->faker->boolean(80) ? $this->faker->phoneNumber() : null,
-            'source' => $this->faker->randomElement([
+            'name' => fake()->name(),
+            'email' => fake()->boolean(70) ? fake()->unique()->safeEmail() : null,
+            'phone' => fake()->boolean(80) ? fake()->phoneNumber() : null,
+            'source' => fake()->randomElement([
                 'facebook',
                 'whatsapp',
                 'website',
                 'manual',
             ]),
-            'stage' => $this->faker->randomElement([
+            'stage' => fake()->randomElement([
                 'new',
                 'contacted',
                 'follow_up',
@@ -27,13 +27,13 @@ class LeadFactory extends Factory
                 'converted',
                 'lost',
             ]),
-            'assigned_to' => $this->faker->boolean(40)
+            'assigned_to' => fake()->boolean(40)
                 ? User::query()->inRandomOrder()->value('id')
                 : null,
-            'notes' => $this->faker->boolean(70) ? $this->faker->sentence() : null,
+            'notes' => fake()->boolean(70) ? fake()->sentence() : null,
             'metadata' => [
-                'imported' => $this->faker->boolean(),
-                'tag' => $this->faker->word(),
+                'imported' => fake()->boolean(),
+                'tag' => fake()->word(),
             ],
         ];
     }
