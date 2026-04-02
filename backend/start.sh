@@ -8,4 +8,4 @@ php artisan view:clear || true
 
 php artisan migrate --seed --force || true
 
-exec supervisord -n
+apache2-foreground
