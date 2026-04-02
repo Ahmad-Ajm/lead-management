@@ -17,6 +17,8 @@ class LeadSeeder extends Seeder
             ]);
         }
 
-        Lead::factory()->count(50)->create();
+        if (Lead::count() === 0) {
+            Lead::factory()->count(50)->create();
+        }
     }
 }

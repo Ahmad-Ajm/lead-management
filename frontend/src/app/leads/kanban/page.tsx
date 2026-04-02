@@ -3,24 +3,35 @@ import { KanbanBoard } from "@/features/leads/components/kanban/KanbanBoard";
 
 export default function LeadsKanbanPage() {
   return (
-    <main className="space-y-6 p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="container">
+      <section className="hero">
+        <div className="page-header" style={{ marginBottom: 0 }}>
+          <div>
+            <h1>Leads Kanban</h1>
+            <p>Drag and drop leads between stages with optimistic updates.</p>
+          </div>
+
+          <div className="view-toggle">
+            <Link href="/leads">List</Link>
+            <Link href="/leads/kanban" className="active">
+              Kanban
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="page-header">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Leads Kanban</h1>
-          <p className="text-sm text-slate-600">
-            Drag and drop leads between stages.
-          </p>
+          <h2 className="section-title">Pipeline Flow</h2>
+          <p className="section-subtitle">Drop a card on another column to persist its new stage.</p>
         </div>
 
-        <Link
-          href="/leads"
-          className="rounded-lg border px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
+        <Link href="/leads" className="btn ghost">
           Back to list
         </Link>
       </div>
 
       <KanbanBoard />
-    </main>
+    </div>
   );
 }

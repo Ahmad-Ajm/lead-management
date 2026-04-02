@@ -4,13 +4,7 @@ import Link from "next/link";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import type { Lead } from "../../types";
-
-const sourceLabels: Record<string, string> = {
-  facebook: "Facebook",
-  whatsapp: "WhatsApp",
-  website: "Website",
-  manual: "Manual",
-};
+import { shortDate, sourceLabel } from "@/lib/format";
 
 export function LeadKanbanCard({ lead }: { lead: Lead }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
@@ -32,40 +26,34 @@ export function LeadKanbanCard({ lead }: { lead: Lead }) {
     <article
       ref={setNodeRef}
       style={style}
-      className={`rounded-xl border bg-white p-4 shadow-sm ${
-        isDragging ? "opacity-50" : ""
-      }`}
+      className={`kanban-card${isDragging ? " dragging" : ""}`}
     >
       <div
         {...attributes}
         {...listeners}
-        className="cursor-grab active:cursor-grabbing"
+        className="kanban-card-grip"
       >
-        <div className="mb-2 flex items-start justify-between gap-3">
+        <div className="kanban-card-header">
           <div>
-            <h3 className="font-semibold text-slate-900">{lead.name}</h3>
-            <p className="text-sm text-slate-500">
-              {sourceLabels[lead.source] ?? lead.source}
+            <h3 style={{ margin: 0 }}>{lead.name}</h3>
+            <p className="section-subtitle" style={{ marginTop: 6 }}>
+              {lead.email ?? lead.phone ?? "No direct contact details"}
             </p>
           </div>
 
-          <span className="rounded-full bg-slate-100 px-2 py-1 text-xs text-slate-700">
-            #{lead.id}
-          </span>
+          <span className="source-mark">{lead.source.slice(0, 2)}</span>
         </div>
 
-        <div className="space-y-1 text-sm text-slate-600">
-          <p>{lead.email ?? "No email"}</p>
-          <p>{lead.phone ?? "No phone"}</p>
-          <p>{new Date(lead.created_at).toLocaleDateString()}</p>
+        <div className="meta-line">
+          <span className="pill">#{lead.id}</span>
+          <span className="pill">{sourceLabel(lead.source)}</span>
+          <span className="pill">{shortDate(lead.created_at)}</span>
         </div>
       </div>
 
-      <div className="mt-3 border-t pt-3">
-        <Link
-          href={`/leads/${lead.id}`}
-          className="text-sm font-medium text-blue-600 hover:underline"
-        >
+      <div className="inline" style={{ justifyContent: "space-between" }}>
+        <span className="muted">{lead.assigned_user?.name ?? "Unassigned"}</span>
+        <Link href={`/leads/${lead.id}`} className="btn ghost">
           View details
         </Link>
       </div>

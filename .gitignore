@@ -17,6 +17,7 @@ Thumbs.db
 # Node
 node_modules/
 .next/
+.next-build/
 out/
 
 # PHP / Laravel
